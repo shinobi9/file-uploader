@@ -13,6 +13,12 @@ repositories {
 }
 dependencies {
     implementation("no.tornado:tornadofx:1.7.20")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("io.github.rybalkinsd:kohttp:0.12.0")
+    implementation("io.github.rybalkinsd:kohttp-jackson:0.12.0")
+    implementation("io.github.microutils:kotlin-logging:1.12.0")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
 tasks {
