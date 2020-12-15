@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm") version "1.4.10"
+    application
+    id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
 group = "cyou.shinobi9"
@@ -11,9 +13,16 @@ repositories {
     mavenCentral()
     jcenter()
 }
+
+application {
+    mainClassName = "cyou.shinobi9.fileuploader.ApplicationKt"
+}
+
 dependencies {
     implementation("no.tornado:tornadofx:1.7.20")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.4.1")
     implementation("io.github.rybalkinsd:kohttp:0.12.0")
     implementation("io.github.rybalkinsd:kohttp-jackson:0.12.0")
     implementation("io.github.microutils:kotlin-logging:1.12.0")

@@ -2,20 +2,14 @@
 
 package cyou.shinobi9.fileuploader.api
 
-import io.github.rybalkinsd.kohttp.client.client
+import cyou.shinobi9.fileuploader.api.github.proxyClient
 import io.github.rybalkinsd.kohttp.dsl.httpGet
 import io.github.rybalkinsd.kohttp.ext.asStream
 import io.github.rybalkinsd.kohttp.ext.url
-import java.net.InetSocketAddress
-import java.net.Proxy
 
 object imageLoader {
 
-    val client = client {
-        proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("127.0.0.1", 7890))
-    }
-
-    fun loadImageIfExistProxySettings(url: String) = httpGet(client) {
+    fun loadImageIfExistProxySettings(url: String) = httpGet(proxyClient) {
         url(url)
     }.asStream().let { requireNotNull(it) }
 }

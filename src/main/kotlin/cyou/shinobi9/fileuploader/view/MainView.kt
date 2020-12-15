@@ -1,59 +1,62 @@
+@file:Suppress("JoinDeclarationAndAssignment")
+
 package cyou.shinobi9.fileuploader.view
 
-import cyou.shinobi9.fileuploader.api.github.githubUserAPI
-import cyou.shinobi9.fileuploader.api.imageLoader
+import cyou.shinobi9.fileuploader.controller.GithubController
+import cyou.shinobi9.fileuploader.model.RepositoryModel
 import cyou.shinobi9.fileuploader.model.UserModel
+import cyou.shinobi9.fileuploader.style.MainCss
 import javafx.scene.Parent
-import javafx.scene.image.Image
-import javafx.scene.image.ImageView
+import javafx.scene.control.ButtonBar.ButtonData.LEFT
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
 import tornadofx.*
 
 class MainView : View() {
-    override val root: Parent = VBox()
-    private val userModel: UserModel by inject()
-    private lateinit var image: ImageView
+    override val root: Parent = VBox().addClass(MainCss.body)
+    private val userModel by inject<UserModel>()
+    private val githubController by inject<GithubController>()
+    private val repos = mutableListOf<RepositoryModel>().asObservable()
 
     init {
         with(root) {
-            style {
-                prefWidth = 600.px
-                prefHeight = 360.px
-            }
-
-            button {
-                text = "读取环境变量！"
-                action {
-                    userModel.personalAccessToken = System.getenv("TOKEN")
-                }
-            }
-            label {
-                textProperty().bind(userModel.user.personalAccessTokenProp)
-            }
-            button {
-                text = "登录！"
-                action {
-                    val user = githubUserAPI.fetchCurrentUser(userModel.personalAccessToken)
-                    userModel.user.nameProp.set(user.name)
-                    userModel.user.avatarUrlProp.set(user.avatarUrl)
-                    image.imageProperty().bind(
-                        objectBinding(userModel.user.avatarUrlProp) {
-                            value?.let {
-                                Image(
-                                    imageLoader.loadImageIfExistProxySettings(it)
-                                )
-                            }
+            form {
+                fieldset("github") {
+                    field("access token:") {
+                        textfield(userModel.user.personalAccessTokenProp) {
+                            promptText = "github personal access token"
                         }
-                    )
-//                    image.imageProperty().bind(objectBinding("https://www.dogedoge.com/assets/new_logo_header.min.png".toProperty()) { value?.let { Image(it, true) } })
+                    }
                 }
             }
-            label {
-                textProperty().bind(userModel.user.nameProp)
+            hbox {
+//                style { backgroundColor += Color.ALICEBLUE }
+                addClass(MainCss.buttons)
+                buttonbar {
+                    button(type = LEFT) {
+                        text = "获取用户信息"
+                        action { githubController.user(userModel) }
+                    }
+                    button(type = LEFT) {
+                        text = "获取仓库"
+                        action { githubController.repositories(userModel, repos) }
+                    }
+                    button(type = LEFT) {
+                        text = "清除所有数据"
+                        action { githubController.clearAll(userModel, repos) }
+                    }
+                }
             }
-            hyperlink(userModel.user.avatarUrlProp)
+            label(userModel.user.nameProp) {
+                style { backgroundColor += Color.GREEN }
+            }
+//            hyperlink(userModel.user.avatarUrlProp)
 
-            image = imageview {
+            imageview(userModel.user.avatarImageProp)
+
+            tableview(repos) {
+                column("NAME", RepositoryModel::name)
+                column("URL", RepositoryModel::url)
             }
         }
     }

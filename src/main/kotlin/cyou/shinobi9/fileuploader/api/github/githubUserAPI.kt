@@ -13,7 +13,7 @@ import io.github.rybalkinsd.kohttp.jackson.ext.toJson
 
 object githubUserAPI : UserAPI {
     override fun fetchCurrentUser(token: String): User {
-        val response = httpGet {
+        val response = httpGet(proxyClient) {
             header {
                 recommendedAccept()
                 personalAccessToken(token)
@@ -21,12 +21,7 @@ object githubUserAPI : UserAPI {
             githubAPI("/user")
         }
         val currentUser = with(response) {
-            val root = this.toJson()
-                .also { node ->
-                    ObjectMapper()
-                        .configure(SerializationFeature.INDENT_OUTPUT, true)
-                        .writeValueAsString(node).also { println(it) }
-                }
+            val root = this.toJson().alsoLogInfo()
             GithubUser(root["login"].asText(), root["avatar_url"].asText())
         }
         LOG.info { "fetched user ${currentUser.name}" }
