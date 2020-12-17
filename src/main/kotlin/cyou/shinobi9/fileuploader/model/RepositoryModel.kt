@@ -6,12 +6,13 @@ import tornadofx.getValue
 import tornadofx.setValue
 import tornadofx.stringProperty
 
+@Suppress("MemberVisibilityCanBePrivate", "CanBeParameter")
 class RepositoryModel(
     val repository: Repository = Repository(),
 ) : ItemViewModel<RepositoryModel.Repository>() {
-    var name by repository.nameProp
-    var url by repository.urlProp
-    var description by repository.descriptionProp
+    var name: String by repository.nameProp
+    var url: String by repository.urlProp
+    var description: String by repository.descriptionProp
 
     data class Repository(
         val nameProp: StringProperty = stringProperty("nameProp"),

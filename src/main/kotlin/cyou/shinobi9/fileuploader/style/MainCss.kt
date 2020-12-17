@@ -1,13 +1,14 @@
 package cyou.shinobi9.fileuploader.style
 
-import javafx.scene.layout.BorderStrokeStyle
-import javafx.scene.paint.Color
 import tornadofx.*
 
 class MainCss : Stylesheet() {
     companion object {
         val body by cssclass()
         val buttons by cssclass()
+        val repoNameColumn by cssclass()
+        val repoUrlColumn by cssclass()
+        val repoButton by cssclass()
     }
 
     init {
@@ -19,6 +20,16 @@ class MainCss : Stylesheet() {
         }
         buttons {
 //            backgroundColor += Color.RED
+        }
+        repoNameColumn {
+            prefWidth = 200.px
+        }
+        repoUrlColumn {
+            prefWidth = 400.px
+        }
+        repoButton {
+//            prefWidth = 100.percent
+            spacing = 10.px
         }
     }
 }

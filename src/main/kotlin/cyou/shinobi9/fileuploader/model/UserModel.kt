@@ -9,10 +9,10 @@ import tornadofx.*
 class UserModel(
     val user: User = User(),
 ) : ViewModel() {
-    var name by user.nameProp
-    var personalAccessToken by user.personalAccessTokenProp
-    var avatarUrl by user.avatarUrlProp
-    val avatarUrld by user.avatarImageProp
+    var name: String by user.nameProp
+    var personalAccessToken: String by user.personalAccessTokenProp
+    var avatarUrl: String by user.avatarUrlProp
+//    val avatarUrld by user.avatarImageProp
 
     data class User(
         val nameProp: StringProperty = stringProperty(""),
